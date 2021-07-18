@@ -1,4 +1,0 @@
-16:31:12-INFO-Console-The user pressed p to see the list of employees
-16:31:16-INFO-Console-The user pressed f to find an employee by the last name
-16:31:17-WARN-repository.EmployeeRepository-The employee with the last name of ar was not found in the list
-16:31:19-INFO-Console-The user exited from the application
