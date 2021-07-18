@@ -1,0 +1,27 @@
+<configuration scan="true" debug="true">
+
+    <property name="logs" value="C:/Users/hranta/logs"/>
+
+    <appender name="ConsoleLogger" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss}-%level-%class-%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FileLogger" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logs}/company.log</file>
+        <encoder>
+            <pattern>%d{HH:mm:ss}-%level-%class-%msg%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${logs}/archived/comany-%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+        </rollingPolicy>
+
+    </appender>
+    <root level="info">
+<!--        <appender-ref ref="ConsoleLogger"/>-->
+        <appender-ref ref="FileLogger"/>
+    </root>
+</configuration>
