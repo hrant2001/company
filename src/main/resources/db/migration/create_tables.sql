@@ -1,12 +1,3 @@
-CREATE TABLE IF NOT EXISTS employee (
-    employee_id INT PRIMARY KEY AUTO_INCREMENT,
-    fname VARCHAR(50) NOT NULL,
-    lname VARCHAR(50) NOT NULL,
-    birthday DATE NOT NULL,
-    position_id TINYINT NOT NULL,
-    department_id TINYINT NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS positions (
     position_id TINYINT PRIMARY KEY AUTO_INCREMENT,
     position_name VARCHAR(50) NOT NULL,
@@ -16,6 +7,15 @@ CREATE TABLE IF NOT EXISTS positions (
 CREATE TABLE IF NOT EXISTS department (
     department_id TINYINT PRIMARY KEY AUTO_INCREMENT,
     department_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS employee (
+    employee_id INT PRIMARY KEY AUTO_INCREMENT,
+    fname VARCHAR(50) NOT NULL,
+    lname VARCHAR(50) NOT NULL,
+    birthday DATE NOT NULL,
+    position_id TINYINT NOT NULL,
+    department_id TINYINT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS attendance_record (
