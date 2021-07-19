@@ -36,6 +36,7 @@ public class EmployeeRepository implements Repository<Employee>{
         try {
             connection = dataSource.getConnection();
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
 
         employees = getAll(dataSource);
@@ -70,6 +71,7 @@ public class EmployeeRepository implements Repository<Employee>{
         try {
             connection = dataSource.getConnection();
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
 
         String sql = "delete from employee where fname=? and lname=? and birthday=?";
@@ -96,6 +98,7 @@ public class EmployeeRepository implements Repository<Employee>{
         try {
             connection = dataSource.getConnection();
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
 
         employees.clear();
@@ -151,6 +154,7 @@ public class EmployeeRepository implements Repository<Employee>{
         try {
             statement = dataSource.getConnection().createStatement();
         } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
         employees.clear();
         try {

@@ -7,14 +7,8 @@ import util.DataSourceFactory;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.*;
 
 public class EmployeeService {
-
-    /**
-     * The list of the employees
-     */
-    private static List<Employee> employees = new ArrayList<>();
 
     private static Repository<Employee> employeeRepository = new EmployeeRepository();
 
