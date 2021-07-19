@@ -11,162 +11,76 @@ import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 
-public class EmployeeRepository implements Repository<Employee>{
-
-    /**
-     * The resource bundle
-     */
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", new Locale(System.getProperty("lang")));
-
-    /**
-     * Slf4j logger
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeService.class);
+public class EmployeeRepository implements Repository<Employee> {
 
     /**
      * The list of the employees
      */
     private static List<Employee> employees = new ArrayList<>();
 
-    private static PreparedStatement preparedStatement;
-    private static Statement statement;
-    private static Connection connection;
-
-    public void insert(DataSource dataSource, Employee employee) {
-        try {
-            connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-        }
-
-        employees = getAll(dataSource);
-        if (employees.contains(employee)) {
-            LOGGER.warn("The employee " + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " is already in the list");
-            System.out.println("\n" + resourceBundle.getString("emp") + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " " + resourceBundle.getString("in-list") + "\n");
-            return;
-        }
-
+    public int insert(DataSource dataSource, Employee employee) throws SQLException {
         String sql = "insert into employee(fname,lname,birthday,position_id,department_id) values(?,?,?,?,?)";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            employees = getAll(dataSource);
+            if (employees.contains(employee)) {
+                return 1;
+            }
             preparedStatement.setString(1, employee.getFirstName());
             preparedStatement.setString(2, employee.getLastName());
             preparedStatement.setDate(3, Date.valueOf(employee.getBirthday()));
             preparedStatement.setInt(4, employee.getPositionId());
             preparedStatement.setInt(5, employee.getDepartmentId());
 
-            if (preparedStatement.executeUpdate() > 0) {
-                LOGGER.info("The employee " + employee.getFirstName() + " "
-                        + employee.getLastName() + " " + employee.getBirthday() + " was successfully added to the list of employees");
-                System.out.println("\n" + resourceBundle.getString("emp") + " " + employee.getFirstName() + " "
-                        + employee.getLastName() + " " + employee.getBirthday() + " " + resourceBundle.getString("success.add") + "\n");
-            }
+            if (preparedStatement.executeUpdate() > 0)
+                return 0; //ok
 
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
+            return 1; //not ok
         }
     }
 
-    public void delete(DataSource dataSource, Employee employee) {
-        try {
-            connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-        }
-
+    public int delete(DataSource dataSource, Employee employee) throws SQLException {
         String sql = "delete from employee where fname=? and lname=? and birthday=?";
-        try {
-            preparedStatement = connection.prepareStatement(sql);
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
             preparedStatement.setString(1, employee.getFirstName());
             preparedStatement.setString(2, employee.getLastName());
             preparedStatement.setDate(3, Date.valueOf(employee.getBirthday()));
-            if (preparedStatement.executeUpdate() > 0) {
-                LOGGER.info("The employee " + employee.getFirstName() + " " + employee.getLastName() +
-                        " " + employee.getBirthday() + " was successfully deleted from the list of employees");
-                System.out.println("\n" + resourceBundle.getString("emp") + " " + employee.getFirstName() + " " + employee.getLastName() +
-                        " " + employee.getBirthday() + " " + resourceBundle.getString("success.delete") + "\n");
-            } else {
-                LOGGER.warn("The employee " + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " was not found in the list of employees");
-                System.out.println("\n" + resourceBundle.getString("emp") + " " + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " " + resourceBundle.getString("not.in.list") + "\n");
-            }
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
+            if (preparedStatement.executeUpdate() > 0)
+                return 0;
+            return 1;
         }
     }
 
-    public static void findByLastName(DataSource dataSource, String lastName) {
-        try {
-            connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-        }
+    public static List<Employee> findByLastName(DataSource dataSource, String lastName) throws SQLException {
+        String sql = "SELECT * FROM employee where lname=?";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
-        employees.clear();
-        int count = 0;
-        try {
-            preparedStatement = connection.prepareStatement("SELECT * FROM employee where lname=?");
+            employees.clear();
             preparedStatement.setString(1, lastName);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-
                 employees.add(Converter.resultSetToEmployee(resultSet));
             }
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-        }
-        for (Employee emp : employees) {
-            if (emp.getLastName().equals(lastName)) {
-                System.out.println(emp.getLastName() + " " + emp.getFirstName() + " " + emp.getBirthday());
-                count++;
-            }
-        }
-        if (count == 0) {
-            LOGGER.warn("The employee with the last name of " + lastName + " was not found in the list");
-            System.out.println("\n" + resourceBundle.getString("emp") + " " + resourceBundle.getString("not.found") + " " + lastName + " " + resourceBundle.getString("not.in.list") + "\n");
+
+            return employees;
         }
     }
 
-    public void printAll(DataSource dataSource) {
-        employees = getAll(dataSource);
-
-        if (employees == null || employees.isEmpty()) {
-            System.out.println("\n" + resourceBundle.getString("empty.list") + "\n");
-            LOGGER.warn("The list of employees is empty");
-            return;
-        }
-        System.out.println();
-        employees.forEach(System.out::println);
-    }
-
-    public void sort(DataSource dataSource) {
-        employees = getAll(dataSource);
-
-        if (employees == null || employees.isEmpty()) {
-            System.out.println("\n" + resourceBundle.getString("empty.list") + "\n");
-            LOGGER.warn("The list of employees is empty");
-            return;
-        }
-        System.out.println();
-        employees.stream().sorted(Comparator.comparing(Employee::getLastName)).forEach(System.out::println);
-    }
-
-    public List<Employee> getAll(DataSource dataSource) {
-        try {
-            statement = dataSource.getConnection().createStatement();
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
-        }
-        employees.clear();
-        try {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
+    public List<Employee> getAll(DataSource dataSource) throws SQLException {
+        String sql = "SELECT * FROM employee";
+        try (Statement statement = dataSource.getConnection().createStatement()) {
+            employees.clear();
+            ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 employees.add(Converter.resultSetToEmployee(resultSet));
             }
-        } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
+            return employees;
         }
-        return employees;
     }
-
 }

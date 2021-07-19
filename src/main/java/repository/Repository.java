@@ -1,16 +1,13 @@
 package repository;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface Repository<T> {
-    void insert(DataSource dataSource, T t);
+    int insert(DataSource dataSource, T t) throws SQLException;
 
-    void delete(DataSource dataSource, T t);
+    int delete(DataSource dataSource, T t) throws SQLException;
 
-    void printAll(DataSource dataSource);
-
-    void sort(DataSource dataSource);
-
-    List<T> getAll(DataSource dataSource);
+    List<T> getAll(DataSource dataSource) throws SQLException;
 }
