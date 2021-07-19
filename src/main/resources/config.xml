@@ -3,6 +3,6 @@
 <properties>
     <entry key="username">root</entry>
     <entry key="password">dbm2020egs</entry>
-    <entry key="connection-url">jdbc:mysql://localhost:3306/company</entry>
+    <entry key="connection-uri">jdbc:mysql://localhost:3306/company</entry>
     <entry key="db-driver">com.mysql.cj.jdbc.Driver</entry>
 </properties>

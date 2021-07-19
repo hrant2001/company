@@ -1,11 +1,9 @@
 package service;
 
 import model.Employee;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import repository.EmployeeRepository;
 import repository.Repository;
-import util.DBCPDataSource;
+import util.DataSourceFactory;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -23,10 +21,7 @@ public class EmployeeService {
     private static DataSource dataSource;
 
     static {
-        try {
-            dataSource = DBCPDataSource.getDataSource();
-        } catch (SQLException e) {
-        }
+        dataSource = DataSourceFactory.getInstance();
     }
 
     /**
@@ -35,7 +30,7 @@ public class EmployeeService {
      * @param employee The employee to add to the list.
      */
     public static void addEmployee(Employee employee) throws SQLException {
-        employeeRepository.insert(dataSource,employee);
+        employeeRepository.insert(dataSource, employee);
     }
 
     /**
@@ -43,7 +38,7 @@ public class EmployeeService {
      *
      * @param employee The employee to delete from the list.
      */
-    public static void deleteEmployee(Employee employee) throws SQLException{
+    public static void deleteEmployee(Employee employee) throws SQLException {
         employeeRepository.delete(dataSource, employee);
     }
 

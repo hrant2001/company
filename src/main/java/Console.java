@@ -72,6 +72,7 @@ public class Console {
                     try {
                         EmployeeService.addEmployee(new Employee(firstName, lastName, birthday));
                     } catch (SQLException e) {
+                        LOGGER.error(e.getMessage());
                     }
                     break;
                 case "d":
@@ -108,6 +109,7 @@ public class Console {
                     try {
                         EmployeeService.deleteEmployee(new Employee(firstName, lastName, birthday));
                     } catch (SQLException e) {
+                        LOGGER.error(e.getMessage());
                     }
                     break;
                 case "f":
@@ -121,6 +123,7 @@ public class Console {
                     try {
                         EmployeeService.findEmployeeByLastName(lastName);
                     } catch (SQLException e) {
+                        LOGGER.error(e.getMessage());
                     }
                     System.out.println();
                     break;
@@ -131,6 +134,7 @@ public class Console {
                     try {
                         EmployeeService.sortListOfEmployees();
                     } catch (SQLException e) {
+                        LOGGER.error(e.getMessage());
                     }
                     System.out.println();
                     break;
@@ -141,6 +145,7 @@ public class Console {
                     try {
                         EmployeeService.printEmployees();
                     } catch (SQLException e) {
+                        LOGGER.error(e.getMessage());
                     }
                     System.out.println();
                     break;
