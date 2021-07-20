@@ -82,7 +82,7 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return fName.equals(employee.fName) && lName.equals(employee.lName) && birthday.equals(employee.birthday);
+        return fName.equalsIgnoreCase(employee.fName) && lName.equalsIgnoreCase(employee.lName) && birthday.equals(employee.birthday);
     }
 
     @Override

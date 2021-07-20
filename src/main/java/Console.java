@@ -45,7 +45,7 @@ public class Console {
                     LOGGER.info("The user pressed a to add an employee");
 
                     System.out.print(resourceBundle.getString("first.name") + " ");
-                    firstName = input.nextLine().trim().toLowerCase();
+                    firstName = input.nextLine().trim();
                     if (firstName.isEmpty()) {
                         System.out.println("\n" + resourceBundle.getString("empty.first.name") + "\n");
                         LOGGER.warn("The user entered an empty first name");
@@ -53,7 +53,7 @@ public class Console {
                     }
 
                     System.out.print(resourceBundle.getString("last.name") + " ");
-                    lastName = input.nextLine().trim().toLowerCase();
+                    lastName = input.nextLine().trim();
                     if (lastName.isEmpty()) {
                         System.out.println("\n" + resourceBundle.getString("empty.last.name") + "\n");
                         LOGGER.warn("The user entered an empty last name");
@@ -81,7 +81,7 @@ public class Console {
                     LOGGER.info("The user pressed d to delete an employee");
 
                     System.out.print(resourceBundle.getString("first.name") + " ");
-                    firstName = input.nextLine().trim().toLowerCase();
+                    firstName = input.nextLine().trim();
 
                     if (firstName.isEmpty()) {
                         System.out.println("\n" + resourceBundle.getString("empty.first.name") + "\n");
@@ -90,7 +90,7 @@ public class Console {
                     }
 
                     System.out.print(resourceBundle.getString("last.name") + " ");
-                    lastName = input.nextLine().trim().toLowerCase();
+                    lastName = input.nextLine().trim();
                     if (lastName.isEmpty()) {
                         System.out.println("\n" + resourceBundle.getString("empty.last.name") + "\n");
                         LOGGER.warn("The user entered an empty last name");
@@ -117,7 +117,7 @@ public class Console {
                     System.out.println(resourceBundle.getString("find.message"));
                     LOGGER.info("The user pressed f to find an employee by the last name");
                     System.out.print(resourceBundle.getString("last.name") + " ");
-                    lastName = input.nextLine().trim().toLowerCase();
+                    lastName = input.nextLine().trim();
 
                     System.out.println();
                     try {
