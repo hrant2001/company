@@ -2,9 +2,6 @@ package repository;
 
 import util.Converter;
 import model.Employee;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import service.EmployeeService;
 
 import javax.sql.DataSource;
 import java.sql.*;
