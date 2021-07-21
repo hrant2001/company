@@ -69,11 +69,7 @@ public class Console {
                         break;
                     }
 
-                    try {
-                        EmployeeService.addEmployee(new Employee(firstName, lastName, birthday));
-                    } catch (SQLException e) {
-                        LOGGER.error(e.getMessage());
-                    }
+                    EmployeeService.addEmployee(new Employee(firstName, lastName, birthday));
                     break;
                 case "d":
                     // delete an employee
@@ -106,11 +102,7 @@ public class Console {
                         break;
                     }
 
-                    try {
-                        EmployeeService.deleteEmployee(new Employee(firstName, lastName, birthday));
-                    } catch (SQLException e) {
-                        LOGGER.error(e.getMessage());
-                    }
+                    EmployeeService.deleteEmployee(new Employee(firstName, lastName, birthday));
                     break;
                 case "f":
                     // find an employee
@@ -120,33 +112,23 @@ public class Console {
                     lastName = input.nextLine().trim();
 
                     System.out.println();
-                    try {
-                        EmployeeService.findEmployeeByLastName(lastName);
-                    } catch (SQLException e) {
-                        LOGGER.error(e.getMessage());
-                    }
+                    EmployeeService.findEmployeeByLastName(lastName);
                     System.out.println();
                     break;
                 case "s":
                     // sort the list of employees
                     System.out.println(resourceBundle.getString("sort.message"));
                     LOGGER.info("The user pressed s to see the sorted list of employees");
-                    try {
-                        EmployeeService.sortListOfEmployees();
-                    } catch (SQLException e) {
-                        LOGGER.error(e.getMessage());
-                    }
+
+                    EmployeeService.sortListOfEmployees();
                     System.out.println();
                     break;
                 case "p":
                     // print the list of employees
                     System.out.println(resourceBundle.getString("print.message"));
                     LOGGER.info("The user pressed p to see the list of employees");
-                    try {
-                        EmployeeService.printEmployees();
-                    } catch (SQLException e) {
-                        LOGGER.error(e.getMessage());
-                    }
+
+                    EmployeeService.printEmployees();
                     System.out.println();
                     break;
                 default:

@@ -36,15 +36,19 @@ public class EmployeeService {
      *
      * @param employee The employee to add to the list.
      */
-    public static void addEmployee(Employee employee) throws SQLException {
-        if (employeeRepository.insert(dataSource, employee) == 1) {
-            LOGGER.warn("The employee " + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " is already in the list");
-            System.out.println("\n" + resourceBundle.getString("emp") + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " " + resourceBundle.getString("in-list") + "\n");
-        } else {
-            LOGGER.info("The employee " + employee.getFirstName() + " "
-                    + employee.getLastName() + " " + employee.getBirthday() + " was successfully added to the list of employees");
-            System.out.println("\n" + resourceBundle.getString("emp") + " " + employee.getFirstName() + " "
-                    + employee.getLastName() + " " + employee.getBirthday() + " " + resourceBundle.getString("success.add") + "\n");
+    public static void addEmployee(Employee employee) {
+        try {
+            if (employeeRepository.insert(dataSource, employee) == 1) {
+                LOGGER.warn("The employee " + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " is already in the list");
+                System.out.println("\n" + resourceBundle.getString("emp") + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " " + resourceBundle.getString("in-list") + "\n");
+            } else {
+                LOGGER.info("The employee " + employee.getFirstName() + " "
+                        + employee.getLastName() + " " + employee.getBirthday() + " was successfully added to the list of employees");
+                System.out.println("\n" + resourceBundle.getString("emp") + " " + employee.getFirstName() + " "
+                        + employee.getLastName() + " " + employee.getBirthday() + " " + resourceBundle.getString("success.add") + "\n");
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -53,15 +57,19 @@ public class EmployeeService {
      *
      * @param employee The employee to delete from the list.
      */
-    public static void deleteEmployee(Employee employee) throws SQLException {
-        if (employeeRepository.delete(dataSource, employee) == 0) {
-            LOGGER.info("The employee " + employee.getFirstName() + " " + employee.getLastName() +
-                    " " + employee.getBirthday() + " was successfully deleted from the list of employees");
-            System.out.println("\n" + resourceBundle.getString("emp") + " " + employee.getFirstName() + " " + employee.getLastName() +
-                    " " + employee.getBirthday() + " " + resourceBundle.getString("success.delete") + "\n");
-        } else {
-            LOGGER.warn("The employee " + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " was not found in the list of employees");
-            System.out.println("\n" + resourceBundle.getString("emp") + " " + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " " + resourceBundle.getString("not.in.list") + "\n");
+    public static void deleteEmployee(Employee employee) {
+        try {
+            if (employeeRepository.delete(dataSource, employee) == 0) {
+                LOGGER.info("The employee " + employee.getFirstName() + " " + employee.getLastName() +
+                        " " + employee.getBirthday() + " was successfully deleted from the list of employees");
+                System.out.println("\n" + resourceBundle.getString("emp") + " " + employee.getFirstName() + " " + employee.getLastName() +
+                        " " + employee.getBirthday() + " " + resourceBundle.getString("success.delete") + "\n");
+            } else {
+                LOGGER.warn("The employee " + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " was not found in the list of employees");
+                System.out.println("\n" + resourceBundle.getString("emp") + " " + employee.getFirstName() + " " + employee.getLastName() + " " + employee.getBirthday() + " " + resourceBundle.getString("not.in.list") + "\n");
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
         }
     }
 
@@ -70,12 +78,17 @@ public class EmployeeService {
      *
      * @param lastName The last name of the employees to find by in the list.
      */
-    public static void findEmployeeByLastName(String lastName) throws SQLException {
-        List<Employee> employees = EmployeeRepository.findByLastName(dataSource, lastName);
+    public static void findEmployeeByLastName(String lastName) {
+        List<Employee> employees = null;
+        try {
+            employees = EmployeeRepository.findByLastName(dataSource, lastName);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
         if (employees.isEmpty()) {
             LOGGER.warn("The employee with the last name of " + lastName + " was not found in the list");
-            System.out.println("\n" + resourceBundle.getString("emp") + " " + resourceBundle.getString("not.found") + " " + lastName + " "
-                    + resourceBundle.getString("not.in.list") + "\n");
+            System.out.println(resourceBundle.getString("emp") + " " + resourceBundle.getString("not.found") + " " + lastName + " "
+                    + resourceBundle.getString("not.in.list"));
             return;
         }
         employees.forEach(System.out::println);
@@ -84,8 +97,13 @@ public class EmployeeService {
     /**
      * Prints the sorted list of the employees by the last name.
      */
-    public static void sortListOfEmployees() throws SQLException {
-        List<Employee> employees = employeeRepository.getAll(dataSource);
+    public static void sortListOfEmployees() {
+        List<Employee> employees = null;
+        try {
+            employees = employeeRepository.getAll(dataSource);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
         if (employees.isEmpty()) {
             System.out.println("\n" + resourceBundle.getString("empty.list") + "\n");
             LOGGER.warn("The list of employees is empty");
@@ -98,8 +116,13 @@ public class EmployeeService {
     /**
      * Prints the list of the employees.
      */
-    public static void printEmployees() throws SQLException {
-        List<Employee> employees = employeeRepository.getAll(dataSource);
+    public static void printEmployees() {
+        List<Employee> employees = null;
+        try {
+            employees = employeeRepository.getAll(dataSource);
+        } catch (SQLException e) {
+            LOGGER.error(e.getMessage());
+        }
         if (employees.isEmpty()) {
             System.out.println("\n" + resourceBundle.getString("empty.list") + "\n");
             LOGGER.warn("The list of employees is empty");
